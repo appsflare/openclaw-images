@@ -27,8 +27,20 @@ RUN curl -fsSL "https://github.com/astral-sh/uv/releases/download/${UV_VERSION}/
     tar -xz --strip-components=1 -C /usr/local/bin -f /tmp/uv.tar.gz && \
     rm /tmp/uv.tar.gz
 
-# Install claude-code and bun globally via npm
-RUN npm install -g @anthropic-ai/claude-code bun
+# Install Claude Code using the native installer layout
+# Replicates what `curl -fsSL https://claude.ai/install.sh | sh` does:
+# a local npm installation (not npm install -g) with a binary on PATH.
+# Using /opt/claude-code as the install root so the non-root runtime user
+# can execute the binary without needing access to /root/.
+# See: https://github.com/anthropics/claude-code#get-started
+ARG CLAUDE_CODE_VERSION=latest
+RUN mkdir -p /opt/claude-code && \
+    cd /opt/claude-code && \
+    npm install @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION} && \
+    ln -sf /opt/claude-code/node_modules/.bin/claude /usr/local/bin/claude
+
+# Install bun globally via npm
+RUN npm install -g bun
 
 # Restore the original non-root user from the base image
 USER 65534:65534

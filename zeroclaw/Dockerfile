@@ -13,7 +13,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install uv (Python package and project manager) pinned to a specific version
-ARG UV_VERSION=0.6.14
+ARG UV_VERSION=0.11.2
 RUN curl -LsSf "https://astral.sh/uv/${UV_VERSION}/install.sh" | sh
 ENV PATH="$HOME/.local/bin:${PATH}"
 

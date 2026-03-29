@@ -25,3 +25,6 @@ RUN curl -LsSf "https://astral.sh/uv/${UV_VERSION}/install.sh" | UV_INSTALL_DIR=
 
 # Install claude-code and bun globally via npm
 RUN npm install -g @anthropic-ai/claude-code bun
+
+# Restore the original non-root user from the base image
+USER 65534:65534

@@ -39,8 +39,10 @@ RUN mkdir -p /opt/claude-code && \
     npm install @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION} && \
     ln -sf /opt/claude-code/node_modules/.bin/claude /usr/local/bin/claude
 
-# Install bun globally via npm
-RUN npm install -g bun
+# Install bun and agent-browser globally via npm
+# agent-browser bundles a pre-built native Rust binary for Linux x64
+# See: https://agent-browser.dev/installation
+RUN npm install -g bun agent-browser
 
 # Restore the original non-root user from the base image
 USER 65534:65534
